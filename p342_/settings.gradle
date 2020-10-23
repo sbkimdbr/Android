@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "p342_바로가기"

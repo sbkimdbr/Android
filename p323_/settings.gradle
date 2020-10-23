@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "p323_하단탭"
