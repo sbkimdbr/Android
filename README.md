@@ -1,4 +1,4 @@
-### Android
+### Android📱
 
  #### 1. p86,p113
 
@@ -8,7 +8,7 @@
 
 #### 2. Frame Layout, Linear Layout
 
-- Linearlayout(horizon,vertical) 사용하여 위젯 가로 정렬, 세로정렬
+- `Linearlayout` (horizon,vertical) 사용하여 위젯 가로 정렬, 세로정렬
 - Frame layout 여러 위젯 배열하기
 
 
@@ -28,7 +28,7 @@
 
 #### 5. p287~p.351
 
-- `fragment` 위젯 사용하여 화면 전환없이 다른 페이지 출력하기
+- `Fragment` 위젯 사용하여 화면 전환없이 다른 페이지 출력하기
 - Map fragment service를 manifest.xml에 추가하여 화면에 map 출력할 수 있다.
 
 
@@ -41,7 +41,7 @@
 
 #### 7. p.427
 
-- `recyclerview` 사용하여 list 출력하기
+- `Recyclerview` 사용하여 list 출력하기
 
 
 
@@ -53,7 +53,7 @@
 
 #### 9. p.473
 
-- `seekBar` 사용하기
+- `SeekBar` 사용하기
 
 
 
@@ -72,9 +72,9 @@
 
 
 
-#### 12.ws (project)
+#### 12.ws (project)✔️
 
-- 배운 것 활용하여 프로젝트 수행 
+- 배운 것 활용하여 프로젝트 수행✔️ 
 
 
 
