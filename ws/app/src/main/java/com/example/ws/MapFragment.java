@@ -48,7 +48,7 @@ public class MapFragment extends AppCompatActivity {
                 Manifest.permission.ACCESS_COARSE_LOCATION
         };                     //Permission 배열로 만든다
 
-        ActivityCompat.requestPermissions(this, permission, 103);
+        ActivityCompat.requestPermissions(this, permission, 101);
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -62,14 +62,14 @@ public class MapFragment extends AppCompatActivity {
                 ) {
                     return;
                 }
-                gmap2.setMyLocationEnabled(true);
-                LatLng latlng = new LatLng(37.4530141,126.8819433); //경도와 위도를 먼저 잡아서 맨 처음에 이 위치로 지도 옮겨줌
+//                gmap2.setMyLocationEnabled(true);
+//                LatLng latlng = new LatLng(37.572533, 126.975764); //경도와 위도를 먼저 잡아서 맨 처음에 이 위치로 지도 옮겨줌
 
-                gmap2.addMarker(
-                        new MarkerOptions().position(latlng).title("Seoul").snippet("Enjoy show!")
-
-                );
-                gmap2.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,18));
+//                gmap2.addMarker(
+//                        new MarkerOptions().position(latlng).title("Seoul").snippet("Enjoy show!")
+//
+//                );
+//                gmap2.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,18));
             }
         });
 
@@ -99,11 +99,13 @@ public class MapFragment extends AppCompatActivity {
             double lat = location.getLatitude();
             double lon = location.getLongitude();
             LatLng latlng = new LatLng(lat, lon);
+
+            latlng = new LatLng(37.572533, 126.975764);
             gmap2.addMarker(
                     new MarkerOptions().position(latlng).title("Musical").snippet("광화문로")
            );
 
-            gmap2.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 10));
+            gmap2.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 18));
         }
         }
 
