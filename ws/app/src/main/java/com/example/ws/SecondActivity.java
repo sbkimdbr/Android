@@ -1,5 +1,6 @@
 package com.example.ws;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,6 +54,7 @@ public class SecondActivity extends AppCompatActivity {
     Button button7;
     Button button8;
     NotificationManager manager;
+    ImageView imageView2;
 
 //    @Override
 //    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -77,6 +81,7 @@ public class SecondActivity extends AppCompatActivity {
         container = findViewById(R.id.container);
         list = new ArrayList<>();
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        imageView2 = findViewById(R.id.imageView2);
 
         FirebaseMessaging.getInstance().subscribeToTopic("car").addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -126,6 +131,11 @@ public class SecondActivity extends AppCompatActivity {
 
 
     private void getData() {
+
+        //데이터 가져오기 위해 서버와 연동
+        //Async 사용하겠다고 선언
+        //Async class 만들고 async 실행 -> 데이터는 json 형식으로 가져오겠다
+                                        // listView에 출력함
 
         String url = "http://192.168.123.107/web/items.jsp";
 
@@ -187,6 +197,30 @@ public class SecondActivity extends AppCompatActivity {
             ItemAdapter itemAdapter = new ItemAdapter();
             listView.setAdapter(itemAdapter);
 
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SecondActivity.this);
+                    builder.setTitle(list.get(position).getId());
+                    builder.setMessage("name:"+list.get(position).getId()+"\n"+
+                            "place:"+ list.get(position).getName()+"\n"
+                            );
+                    final String url = "http://192.168.123.107/web/img/";
+                    Log.d("TAG",url);
+                    LayoutInflater layoutInflater = getLayoutInflater();
+                    View view1= layoutInflater.inflate(R.layout.dlayout, (ViewGroup) findViewById(R.id.dlayout));
+                    ImageView dimg = view1.findViewById(R.id.imageView2);
+                    GetImg t3 = new GetImg(list.get(position).getImg(), url, dimg);
+                    t3.start();
+
+                    builder.setView(view1);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+
+                }
+            });
+
         }
     }
 
@@ -229,6 +263,8 @@ public class SecondActivity extends AppCompatActivity {
             String img = list.get(position).getImg();
 
             final String url = "http://192.168.123.107/web/img/"+img;
+            GetImg t1 = new GetImg(img, url, imageView);
+            t1.start();
 
             Thread t = new Thread(new Runnable() {
 
@@ -282,6 +318,16 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
+    class GetImg extends Thread{
+        String img;
+        String url;
+        ImageView imageView2;
+         public GetImg(String ima,String url,ImageView imageView){
+          this.img=img;
+          this.url=url;
+          this.imageView2= imageView2;
+         }
+    }
 
     @Override
     //상단바 메뉴의 버튼을 누르면 화면 전환된다.

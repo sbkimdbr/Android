@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void login(View v){
 
+        //서버와 연동을 위해 async 활용
+
         String id=tx_id.getText().toString(); //저장된 tx_id 값 가져옴
         String pwd=tx_pwd.getText().toString();
         //Toast.makeText(this,id+""+pwd,Toast.LENGTH_SHORT).show();
