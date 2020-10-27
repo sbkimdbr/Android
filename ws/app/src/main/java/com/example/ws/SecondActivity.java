@@ -102,22 +102,6 @@ public class SecondActivity extends AppCompatActivity {
         getData();
     }
 
-    public BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent != null) {
-                String title = intent.getStringExtra("title");
-                String control = intent.getStringExtra("control");
-                String data = intent.getStringExtra("data");
-
-                Toast.makeText(SecondActivity.this, title + " " + control + " " + data,
-                        Toast.LENGTH_LONG).show();
-
-
-            }
-
-        }
-    };
 
     public void map(View v){
         Intent intent = new Intent(getApplicationContext(),MapFragment.class);
@@ -203,14 +187,15 @@ public class SecondActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(SecondActivity.this);
                     builder.setTitle(list.get(position).getId());
                     builder.setMessage("name:"+list.get(position).getId()+"\n"+
-                            "place:"+ list.get(position).getName()+"\n"
+                            "place:"+ list.get(position).getName()+"\n"+
+                            "time:" + list.get(position).getAge()+"\n"
                             );
                     final String url = "http://192.168.123.107/web/img/";
-                    Log.d("TAG",url);
+                    //Log.d("TAG",url);
                     LayoutInflater layoutInflater = getLayoutInflater();
                     View view1= layoutInflater.inflate(R.layout.dlayout, (ViewGroup) findViewById(R.id.dlayout));
-                    ImageView dimg = view1.findViewById(R.id.imageView2);
-                    GetImg t3 = new GetImg(list.get(position).getImg(), url, dimg);
+                    ImageView imageView2 = view1.findViewById(R.id.imageView2);
+                    GetImg t3 = new GetImg(list.get(position).getImg(), url, imageView2);
                     t3.start();
 
                     builder.setView(view1);
@@ -263,8 +248,8 @@ public class SecondActivity extends AppCompatActivity {
             String img = list.get(position).getImg();
 
             final String url = "http://192.168.123.107/web/img/"+img;
-            GetImg t1 = new GetImg(img, url, imageView);
-            t1.start();
+//            GetImg t1 = new GetImg(img, url, imageView);
+//            t1.start();
 
             Thread t = new Thread(new Runnable() {
 
@@ -322,7 +307,7 @@ public class SecondActivity extends AppCompatActivity {
         String img;
         String url;
         ImageView imageView2;
-         public GetImg(String ima,String url,ImageView imageView){
+         public GetImg(String img,String url,ImageView imageView2){
           this.img=img;
           this.url=url;
           this.imageView2= imageView2;
@@ -345,6 +330,24 @@ public class SecondActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.mymenu,menu);
         return true;
     }
+
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                String title = intent.getStringExtra("title");
+                String control = intent.getStringExtra("control");
+                String data = intent.getStringExtra("data");
+
+                Toast.makeText(SecondActivity.this, title + " " + control + " " + data,
+                        Toast.LENGTH_LONG).show();
+
+
+            }
+
+        }
+    };
+
 
 }
 
