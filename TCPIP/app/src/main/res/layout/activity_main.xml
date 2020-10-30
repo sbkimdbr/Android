@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tx_list"
+        android:layout_width="match_parent"
+        android:layout_height="138dp"
+        android:text="List"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/et_ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="input ip"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/et_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="input msg"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="clickBt"
+        android:text="Button" />
+
+    <TextView
+        android:id="@+id/tx_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#9C9797"
+        android:hint="msg"
+        android:text="msg"
+        android:textSize="24sp" />
+</LinearLayout>
