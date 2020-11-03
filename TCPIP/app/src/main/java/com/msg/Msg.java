@@ -3,7 +3,6 @@ package com.msg;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Msg implements Serializable {
 

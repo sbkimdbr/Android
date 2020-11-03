@@ -1,21 +1,29 @@
 package com.example.tcpip;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import android.net.wifi.p2p.WifiP2pManager;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.msg.Msg;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     Socket socket;
     Sender sender;
 
+    NotificationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,18 @@ public class MainActivity extends AppCompatActivity {
         tx_msg = findViewById(R.id.tx_msg);
         et_ip = findViewById(R.id.et_ip);
         et_msg = findViewById(R.id.et_msg);
+        manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("client").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+              String msg = "FCM Complete";
+                if (!task.isSuccessful()) {
+                    msg = "FCM Fail";
+                }
+                Log.d("[TAG]:", msg);
+            }
+        });
 
         port = 5555;
         address = "192.168.123.107";
@@ -48,8 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(con).start();
 
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.registerReceiver(receiver, new IntentFilter("notification"));
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -127,9 +151,9 @@ public class MainActivity extends AppCompatActivity {
         }else{
             ArrayList<String> ips = new ArrayList<>();
             ips.add(txip);
-            ips.add(txmsg);
 
-            msg=new Msg(ips,id,txip);
+
+            msg=new Msg(ips,id,txmsg);
 
 
         }
@@ -208,24 +232,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        private void sendMsg(Msg msg) {
-
-         et_ip.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-             @Override
-             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                 String etip = et_ip.getText().toString();
-                 Msg msg= null;
-                 if (etip.equals("1")){
-                     msg = new Msg(id,etip);
-                 }else{
-                     ArrayList<String> ips = new ArrayList<>();
-                     ips.add("/192.168.123.107");
-                     msg = new Msg(null,id,etip);
-                 }
-                 return false;
-             }
-         });
-        }
+//        private void sendMsg(Msg msg) {
+//
+//         et_ip.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//             @Override
+//             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                 String etip = et_ip.getText().toString();
+//                 Msg msg= null;
+//                 if (etip.equals("1")){
+//                     msg = new Msg(id,etip);
+//                 }else{
+//                     ArrayList<String> ips = new ArrayList<>();
+//                     ips.add("/192.168.0.82");
+//                     msg = new Msg(null,id,etip);
+//                 }
+//                 return false;
+//             }
+//         });
+//        }
 
     }
 
@@ -233,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
         Socket socket;
         ObjectOutputStream oo ;
         Msg msg;
+
         public Sender(Socket socket) throws IOException {
             this.socket=socket;
             oo=new ObjectOutputStream(socket.getOutputStream());
@@ -248,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
             if(oo!=null) {
                 try {
                     oo.writeObject(msg);//msg전송 서버에게 전송한다.
-
+                   //et_msg.setText("");
                 } catch (IOException e) {
                     // server가 죽어있을 확률이 크다
 
@@ -279,4 +304,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                String title = intent.getStringExtra("title");
+                String control = intent.getStringExtra("control");
+                String data = intent.getStringExtra("data");
+                Toast.makeText(MainActivity.this, title + " " + control + " " + data,
+                        Toast.LENGTH_LONG).show();
+
+
+            }
+        }
+    };
+
 }
